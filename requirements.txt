@@ -4,3 +4,7 @@ psycopg2-binary
 python-decouple
 django-jazzmin
 Pillow
+python-dotenv
+django-filter
+python-slugify
+drf-yasg
