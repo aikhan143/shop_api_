@@ -32,11 +32,22 @@ class LikeViewSet(ModelViewSet):
             self.permission_classes = [IsAuthorPermission]
         return super().get_permissions()
     
-class CartProductViewSet(ModelViewSet):
-    queryset = CartProduct.objects.all()
-    serializer_class = CartProductSerializer
+class CartViewSet(ModelViewSet):
+    serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Cart.objects.filter(user=user).order_by('updated_at')
+        return queryset
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve', 'destroy']:
+            self.permission_classes = [IsAuthorPermission]
+        else:
+            self.permission_classes = []
+        return super().get_permissions()
+    
     @action(detail=True, methods=['post'])
     def add_to_cart(self, request, pk=None):
         user = request.user
@@ -52,15 +63,20 @@ class CartProductViewSet(ModelViewSet):
 
         serializer = CartProductSerializer(cart_product)
         return Response(serializer.data, status=201)
+    
+# class CartProductViewSet(ModelViewSet):
+#     queryset = CartProduct.objects.all()
+#     serializer_class = CartProductSerializer
+#     permission_classes = [IsAuthenticated]
 
-    def update(self, request):
-        product = self.get_object()
-        quantity = request.data.get('quantity', None)
+#     def update(self, request):
+#         product = self.get_object()
+#         quantity = request.data.get('quantity', None)
 
-        if quantity is not None:
-            product.quantity = quantity
-            product.save()
-            serializer = self.get_serializer(product)
-            return Response(serializer.data)
+#         if quantity is not None:
+#             product.quantity = quantity
+#             product.save()
+#             serializer = self.get_serializer(product)
+#             return Response(serializer.data)
 
-        return Response('Choose an amount', status=400)
+#         return Response('Choose an amount', status=400)

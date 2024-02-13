@@ -46,5 +46,5 @@ class BrandViewSet(ModelViewSet):
         if self.action in ['list', 'retrieve']:
             self.permission_classes = [AllowAny]
         elif self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAuthenticated, IsBrandPermission]
+            self.permission_classes = [IsAuthorPermission, IsBrandPermission]
         return super().get_permissions()
