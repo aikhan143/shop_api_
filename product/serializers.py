@@ -36,11 +36,22 @@ class CategorySerializer(ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        representation =  super().to_representation(instance)
+        representation = super().to_representation(instance)
         representation['products'] = ProductSerializer(Product.objects.filter(category=instance.pk), many=True).data
         return representation
 
 class BrandSerializer(ModelSerializer):
+    user = ReadOnlyField(source='user.name')
     class Meta:
         model = Brand
         fields = '__all__'
+
+    def create(self, validated_data):
+        user = self.context.get('request').user
+        brand = Brand.objects.create(user=user, **validated_data)
+        return brand
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['products'] = ProductSerializer(Product.objects.filter(brand=instance.pk), many=True).data
+        return representation
