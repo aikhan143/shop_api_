@@ -1,22 +1,3 @@
-# from rest_framework import serializers
-# from django.contrib.auth import get_user_model
-
-
-# User = get_user_model()
-
-# class RegistrationSerizler():
-#     email = serializers.EmailField(max_length=20, requried=True)
-#     password = serializers.CharField(required=True, min_length=7)
-#     password_confirm = serializers.CharField(min_length=7, required=True, write_only=True)
-#     name = serializers.CharField(required=True)
-#     last_name = serializers.CharField(required=False)
-#     is_active = serializers.BooleanField(write_only=True)
-
-#     def valdited_email(self, email):
-#         if User.objects.filter(email=email).exists():
-#             raise serializers.ValidationError('пользователь с таким email уже существует!') 
-        
-
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from .utils import send_activation_code
