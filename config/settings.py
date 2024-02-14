@@ -47,12 +47,10 @@ INSTALLED_APPS = [
     # libs
     'rest_framework',
     'django_filters',
-    'drf_yasg',
-<<<<<<< HEAD
-    
-=======
+    'drf_yasg',    
+
     'rest_framework.authtoken',
->>>>>>> f7d05634d8ccec6c22c5f9d4817ccf3f6002a6ff
+
 
     #apps
 
