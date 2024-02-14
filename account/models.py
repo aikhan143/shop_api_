@@ -55,8 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         code = get_random_string(10)
         self.activation_code = code 
         self.save()
-
-
+        
     def __str__(self):
         return self.email
 
