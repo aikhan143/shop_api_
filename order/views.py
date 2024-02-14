@@ -76,7 +76,8 @@ class VerificationCreateView(CreateAPIView):
     serializer_class = VerificationSerializer
     permission_classes = [AllowAny]
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)

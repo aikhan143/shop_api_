@@ -56,7 +56,7 @@ class VerificationSerializer(ModelSerializer):
     
     class Meta:
         model = Order
-        fields = ['user', 'verification_code']
+        fields = ['id', 'user', 'verification_code']
 
     def validate(self, attrs):
         user = attrs.get('user')
