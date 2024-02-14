@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from .models import *
-from django.dispatch import receiver
 from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
 from django.shortcuts import get_object_or_404
 
 User = get_user_model()
@@ -60,20 +58,3 @@ class LikeSerializer(serializers.ModelSerializer):
         validated_data['product'] = product
         like = Like.objects.create(user=user, **validated_data)
         return like
-    
-class CartProductSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CartProduct
-        fields = ['product', 'quantity', 'total_price']
-
-class CartSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Cart
-        fields = ['products', 'total_price']
-
-@receiver(post_save, sender=User)
-def create_user_cart(sender, instance, created, **kwargs):
-    if created:
-        Cart.objects.create(user=instance)

@@ -44,7 +44,7 @@ class BrandSerializer(ModelSerializer):
     user = ReadOnlyField(source='user.name')
     class Meta:
         model = Brand
-        fields = '__all__'
+        fields = ['title', 'products']
 
     def create(self, validated_data):
         user = self.context.get('request').user
