@@ -7,6 +7,7 @@ User = get_user_model()
 class Brand(models.Model):
     slug = models.SlugField(max_length=100,primary_key=True, blank=True)
     title = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='brands')
     
     def __str__(self) -> str:
         return self.title

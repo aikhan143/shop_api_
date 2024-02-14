@@ -11,3 +11,4 @@ def send_activation_code(email,activation_code):
         'test@gmail.com',
         [email]
     )
+    )

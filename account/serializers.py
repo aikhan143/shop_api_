@@ -3,9 +3,7 @@ from django.contrib.auth import get_user_model, authenticate
 from .utils import send_activation_code
 from django.core.mail import send_mail
 
-
 User = get_user_model()
-
 
 class RegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
@@ -15,13 +13,15 @@ class RegistrationSerializer(serializers.Serializer):
     name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=False, write_only=True)
     is_active = serializers.BooleanField(read_only=True)
+    is_brand = serializers.BooleanField(default=False)
+    brand = serializers.CharField(max_length=40)
 
     def validate_email(self, email):
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError('Пользователь существует')
         return email
 
-    def validate(self, attrs: dict):
+    def validate(self, attrs):
         password = attrs.get('password')
         password_confirm = attrs.pop('password_confirm')
         if password != password_confirm:
@@ -44,9 +44,7 @@ class ActivationSerializer(serializers.Serializer):
         code = attrs.get('code')
 
         if not User.objects.filter(email=email, activation_code=code).exists(): 
-            raise serializers.ValidationError(
-                'Пользователь не найден'
-            )
+            raise serializers.ValidationError('User not found')
         return attrs
     
     def activate(self):
@@ -64,7 +62,7 @@ class LoginSerializer(serializers.Serializer):
     def validate_email(self, email):
         if not User.objects.filter(email=email).exists():
             raise serializers.ValidationError(
-                'Пользователь не найден'
+                'User not found'
             )
         return email
     
@@ -81,12 +79,10 @@ class LoginSerializer(serializers.Serializer):
                 )
             if not user:
                 raise serializers.ValidationError(
-                    'Не верный email или пароль'
+                    'Incorrect email or password'
                 )
         attrs['user'] = user
         return attrs
-
-    
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(min_length=8, required=True)
@@ -180,11 +176,3 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
         user.activation_code = ''
         user.save()
         
-
-
-
-
-
-
-
- 

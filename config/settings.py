@@ -31,6 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'account.User'
 
 # Application definition
 
@@ -47,13 +48,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'drf_yasg',
-    
-
+    'rest_framework.authtoken',
+  
     #apps
 
-    'account'
+    'account',
     'product',
     'review',
+    'order',
 
 ]
 
