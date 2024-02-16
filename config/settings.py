@@ -165,3 +165,9 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/' 
+
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # адрес Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

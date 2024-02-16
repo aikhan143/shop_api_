@@ -3,7 +3,14 @@ from .models import *
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from product.serializers import ProductListSerializer
-from .utils import send_order_details
+from . import tasks
+import stripe
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
 
 class CartProductSerializer(ModelSerializer):
 
@@ -27,11 +34,49 @@ def create_user_cart(sender, instance, created, **kwargs):
 class OrderSerializer(ModelSerializer):
     user = ReadOnlyField(source='user.name')
     total_price = ReadOnlyField(source='cart.total_price')
+    payment_link = ReadOnlyField()
     
     class Meta:
         model = Order
-        fields = ['user', 'total_price', 'created_at']
+        fields = ['id', 'user', 'total_price', 'created_at', 'payment_link']
 
+    def create_payment_link(self, validated_data):
+        request = self.context.get('request')
+        user = request.user
+        cart = user.cart
+        product_title = cart.products.first().title  
+        product_description = cart.products.first().description 
+        amount = cart.total_price()
+
+        try:
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': product_title,
+                            'description': product_description,
+                        },
+                        'unit_amount': amount,
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url='https://example.com/success',
+                cancel_url='https://example.com/cancel'
+            )
+
+            return session.url
+
+        except stripe.error.StripeError as e:
+            return f'Error: {str(e)}'
+        
+    def get_payment_link(self, instance):
+        if instance.payment_link:
+            return instance.payment_link
+        return self.create_payment_link(instance)
+        
     def create(self, validated_data):
         request = self.context.get('request')
         user = request.user
@@ -42,7 +87,7 @@ class OrderSerializer(ModelSerializer):
             total_price = cart.total_price() 
             order = Order.objects.create(user=user, cart=cart, total_price=total_price)
             order.create_verification_code()
-            send_order_details(user.email, order, order.verification_code)
+            tasks.send_order_details(user.email, order, order.verification_code)
             return order
         else:
             raise ValidationError('Cart is empty')
@@ -50,6 +95,7 @@ class OrderSerializer(ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['products'] = ProductListSerializer(instance.cart.products.all(), many=True).data
+        representation['payment_link'] = self.get_payment_link(instance)
         return representation
 
 class VerificationSerializer(ModelSerializer):

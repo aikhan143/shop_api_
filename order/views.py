@@ -7,6 +7,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
+import stripe
+
+
 class CartViewSet(ModelViewSet):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
@@ -59,7 +62,7 @@ class CartViewSet(ModelViewSet):
 class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthorPermission]
-
+    
     def get_queryset(self):
         user = self.request.user
         queryset = Order.objects.filter(user=user).order_by('created_at')
@@ -70,6 +73,7 @@ class OrderViewSet(ModelViewSet):
         instance.is_completed = True  
         instance.save()
         return Response("Order completed successfully", status=204)
+    
     
 class VerificationCreateView(CreateAPIView):
     queryset = Order.objects.all()
