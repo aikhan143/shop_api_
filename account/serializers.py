@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
-from .utils import send_activation_code
-from django.core.mail import send_mail
+from . import tasks
 
 User = get_user_model()
 
@@ -31,7 +30,7 @@ class RegistrationSerializer(serializers.Serializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         user.create_activation_code()
-        send_activation_code(user.email, user.activation_code)
+        tasks.send_activation_code.delay(user.email, user.activation_code)
         return user
     
 
@@ -137,12 +136,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
         email = self.validated_data.get('email')
         user = User.objects.get(email=email)
         user.create_activation_code()
-        send_mail(
-            'Восстановление пароля',
-            f'Ваш код восстановления: {user.activation_code}',
-            'test@gmail.com',
-            [email]
-        )
+        tasks.send_verification_email(user.email, user.activation_code)
 
 
 class ForgotPasswordCompleteSerializer(serializers.Serializer):
