@@ -172,7 +172,7 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
         email = self.validated_data.get('email')
         password = self.validated_data.get('password')
         user = User.objects.get(email=email)
-        user.set_password(password)
+        user.set_passwor(password)
         user.activation_code = ''
         user.save()
-        
+

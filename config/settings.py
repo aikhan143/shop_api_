@@ -47,9 +47,7 @@ INSTALLED_APPS = [
     # libs
     'rest_framework',
     'django_filters',
-    'drf_yasg',
     'drf_yasg',    
-
     'rest_framework.authtoken',
   
 
@@ -71,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 
@@ -135,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Bishkek'
 
 USE_I18N = True
 
@@ -160,6 +159,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
+ 
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -169,4 +170,32 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/' 
+MEDIA_URL = '/media/'
+
+
+
+import os
+import logging
+
+# Получаем абсолютный путь к текущей директории
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Создаем папку logs в текущей директории
+logs_directory = os.path.join(current_directory, 'logs')
+os.makedirs(logs_directory, exist_ok=True)
+
+# Полный путь к файлу логов
+log_file_path = os.path.join(logs_directory, 'logs.log')
+
+# Настройка базовой конфигурации
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Создание файла для записи логов
+file_handler = logging.FileHandler(log_file_path)
+
+# Настройка формата записей в файле (если нужно)
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
+# Добавление обработчика к базовой конфигурации логирования
+logging.getLogger('').addHandler(file_handler)
+
