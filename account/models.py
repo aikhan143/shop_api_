@@ -20,7 +20,6 @@ class UserManager(BaseUserManager):
     
     def create_user(self, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', False)
-        # extra_fields.setdefault('is_active', True)
         return self._create(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
@@ -41,9 +40,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email' #будет использоваться для логина
+    USERNAME_FIELD = 'email' 
 
-    REQUIRED_FIELDS = ['name'] #обязательное поля при создании superuserа
+    REQUIRED_FIELDS = ['name'] 
 
     def has_module_perms(self, app_label):
         return self.is_staff
@@ -55,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         code = get_random_string(10)
         self.activation_code = code 
         self.save()
-
+        
     def __str__(self):
         return self.email
 
