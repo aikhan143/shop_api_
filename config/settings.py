@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'rest_framework.authtoken',
-
+  
     #apps
 
     'account',
@@ -68,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'config.urls'
 
