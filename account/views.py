@@ -5,12 +5,14 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
+
 from django.http import JsonResponse
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import serializers
 import logging
+from . import tasks
 
 class RegistrationView(APIView):
 
@@ -65,6 +67,7 @@ class ForgotPasswordView(APIView):
     def post(self, request):
         serializer = ForgotPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         serializer.send_verification_email()
         return Response('Password recovery code has been sent to your email', status=200)
     

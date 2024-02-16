@@ -37,6 +37,7 @@ class Order(models.Model):
     is_completed = models.BooleanField(default=False)
     verification_code = models.CharField(max_length=20, blank=True)
     is_verified = models.BooleanField(default=False)
+    payment_link = models.CharField()
 
     def __str__(self):
         return f"Order #{self.id} with the total price {self.total_price} - User: {self.user.name}."

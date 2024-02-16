@@ -42,9 +42,10 @@ class CategorySerializer(ModelSerializer):
 
 class BrandSerializer(ModelSerializer):
     user = ReadOnlyField(source='user.name')
+
     class Meta:
         model = Brand
-        fields = ['title', 'products']
+        fields = ['user', 'title', 'products']
 
     def create(self, validated_data):
         user = self.context.get('request').user

@@ -8,7 +8,7 @@ router.register('cart', CartViewSet, basename='cart')
 
 urlpatterns = [
     path('products/<slug:pk>/add_to_cart/', CartViewSet.as_view({'post': 'add_to_cart'}), name='cart-add-to-cart'),
-    path('order/verify-order/', VerificationCreateView.as_view())
+    path('order/verify-order/<int:pk>/', VerificationCreateView.as_view()),
     ]
 
 urlpatterns += router.urls
