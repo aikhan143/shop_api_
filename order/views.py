@@ -5,9 +5,7 @@ from product.permissions import *
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
-from rest_framework.generics import CreateAPIView
-from rest_framework.views import APIView
-import stripe
+from rest_framework import generics
 
 
 class CartViewSet(ModelViewSet):
@@ -41,23 +39,6 @@ class CartViewSet(ModelViewSet):
 
         serializer = CartProductSerializer(cart_product)
         return Response(serializer.data, status=201)
-    
-# class CartProductViewSet(ModelViewSet):
-#     queryset = CartProduct.objects.all()
-#     serializer_class = CartProductSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def update(self, request):
-#         product = self.get_object()
-#         quantity = request.data.get('quantity', None)
-
-#         if quantity is not None:
-#             product.quantity = quantity
-#             product.save()
-#             serializer = self.get_serializer(product)
-#             return Response(serializer.data)
-
-#         return Response('Choose an amount', status=400)
 
 class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
@@ -68,22 +49,36 @@ class OrderViewSet(ModelViewSet):
         queryset = Order.objects.filter(user=user).order_by('created_at')
         return queryset
     
-    def destroy(self, request):
+    def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.is_completed = True  
-        instance.save()
-        return Response("Order completed successfully", status=204)
-    
-    
-class VerificationCreateView(CreateAPIView):
+        instance.status = 'completed'
+        instance.cart.clear_cart()
+        instance.delete()
+        return Response('Order completed successfully', status=204)
+        
+class VerificationViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = VerificationSerializer
     permission_classes = [AllowAny]
 
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.verify()
-        return Response('Verification successful', status=200)
+        return Response(serializer.data, status=200)
+
+# class OrderHistoryList(generics.ListAPIView):
+#     queryset = OrderHistory.objects.all()
+#     serializer_class = OrderHistorySerializer
+#     permission_classes = [IsAuthorPermission]
+
+#     def get_queryset(self):
+#         user = self.request.user
+#         return OrderHistory.objects.filter(order__user=user).order_by('-order__created_at')
+
+# class OrderHistoryDetail(generics.RetrieveAPIView):
+#     queryset = OrderHistory.objects.all()
+#     serializer_class = OrderHistorySerializer
+#     permission_classes = [IsAuthorPermission]
