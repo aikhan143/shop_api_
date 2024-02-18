@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
 
-# Указываем имя проекта Django и устанавливаем переменную окружения "DJANGO_SETTINGS_MODULE"
+# Указываем имя проекта и устанавливаем переменную окружения "DJANGO_SETTINGS_MODULE"
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 # Создаем экземпляр Celery

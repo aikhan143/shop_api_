@@ -8,5 +8,7 @@ router.register('categories', CategoryViewSet)
 router.register('brands', BrandViewSet)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('recommend-products/', ProductRecommendationView.as_view()),
+
+    path('', include(router.urls)),
 ]

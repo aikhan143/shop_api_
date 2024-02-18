@@ -202,4 +202,3 @@ STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  # адрес Redis
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-
