@@ -53,7 +53,6 @@ class OrderSerializer(ModelSerializer):
             order.create_verification_code()
             tasks.send_order_details(user.email, order, order.verification_code)
             order.save()
-            OrderHistory.objects.create(order=order)
             return order
         else:
             raise ValidationError('Cart is empty')
