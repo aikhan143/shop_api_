@@ -9,14 +9,14 @@ class UserTest(APITestCase):
         self.factory = APIRequestFactory()
         self.user = User.objects.create_user(
             email='user@gmail.com',
-            password='12345678',
+            password='123456789',
             is_active=True,
             activation_code=1234,
         )
 
     def test_registration(self):
         data = {
-            'email': 'danysh@mail.ru',
+            'email': 'user@gmail.com',
             'password': '123456789',
             'password_confirm': '123456789',
             'name': 'danysh',
@@ -31,7 +31,7 @@ class UserTest(APITestCase):
 
     def test_login(self):
         data = {
-            'email': 'danysh@mail.ru',
+            'email': 'user@gmail.com',
             'password': '123456789'
         }
         request = self.factory.post('login/', data=data, format='json')

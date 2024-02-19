@@ -21,7 +21,7 @@ class ProductViewSet(ModelViewSet):
         if self.action in ['list', 'retrieve']:
             self.permission_classes = [AllowAny]
         elif self.action in ['create', 'update', 'partial_update', 'destroy']:
-            self.permission_classes = [IsAuthenticated, IsBrandPermission]
+            self.permission_classes = [IsBrandPermission]
         return super().get_permissions()
     
     def get_serializer_class(self, *args, **kwargs):
