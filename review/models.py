@@ -15,7 +15,7 @@ class Review(models.Model):
         return f'{self.rating} - {self.comment}'
 
 class Like(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='likes')
+    product = models.ForeignKey(Product, on_delete=models .CASCADE, related_name='likes')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
 
     def __str__(self):
