@@ -10,7 +10,7 @@ class UserManager(BaseUserManager):
     def _create(self, email, password, **extra_fields):
         if not email:
             raise ValueError(
-                'Поле email не может быть пустым'
+                'Email field can\'t be empty'
             )
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)

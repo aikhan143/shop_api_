@@ -72,7 +72,3 @@ class ForgotPasswordCompleteView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.set_new_password()
         return Response('Password has been changed', status=200)
-    
-
- 
-

@@ -176,12 +176,18 @@ import os
 import logging
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
+
 logs_directory = os.path.join(current_directory, 'logs')
 os.makedirs(logs_directory, exist_ok=True)
+
 log_file_path = os.path.join(logs_directory, 'logs.log')
+
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
 file_handler = logging.FileHandler(log_file_path)
+
 file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
 logging.getLogger('').addHandler(file_handler)
 
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
@@ -189,4 +195,3 @@ STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  # адрес Redis
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-

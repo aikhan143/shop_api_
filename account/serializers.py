@@ -17,14 +17,14 @@ class RegistrationSerializer(serializers.Serializer):
 
     def validate_email(self, email):
         if User.objects.filter(email=email).exists():
-            raise serializers.ValidationError('Пользователь существует')
+            raise serializers.ValidationError('User already exists')
         return email
 
     def validate(self, attrs):
         password = attrs.get('password')
         password_confirm = attrs.pop('password_confirm')
         if password != password_confirm:
-            raise serializers.ValidationError('Пароли не совпадают')
+            raise serializers.ValidationError('Passwords don\'t match')
         return attrs
 
     def create(self, validated_data):
@@ -93,7 +93,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         user = self.context.get('request').user
         if not user.check_password(old_pass):
             raise serializers.ValidationError(
-                'Введите правильный пароль'
+                'Incorrect password'
             )
         return old_pass
     
@@ -105,12 +105,12 @@ class ChangePasswordSerializer(serializers.Serializer):
 
         if new_pass1 != new_pass2:
             raise serializers.ValidationError(
-                'Пароли не совпадают'
+                'Passwords don\'t match'
             )
         
         if old_pass == new_pass1:
             raise serializers.ValidationError(
-                'Пароли совпадают'
+                'New password can\'t be the same as an old one'
             )
         
         return attrs
@@ -153,11 +153,11 @@ class ForgotPasswordCompleteSerializer(serializers.Serializer):
 
         if not User.objects.filter(email=email, activation_code=code).exists():
             raise serializers.ValidationError(
-                'Пользователь не найдет'
+                'User not found'
             )
         if p1 != p2:
             raise serializers.ValidationError(
-                'Пароли не совпадают'
+                'Passwords don\'t match'
             )
         return attrs
     
