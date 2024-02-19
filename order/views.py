@@ -42,23 +42,6 @@ class CartViewSet(ModelViewSet):
         serializer = CartProductSerializer(cart_product)
         return Response(serializer.data, status=201)
     
-# class CartProductViewSet(ModelViewSet):
-#     queryset = CartProduct.objects.all()
-#     serializer_class = CartProductSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def update(self, request):
-#         product = self.get_object()
-#         quantity = request.data.get('quantity', None)
-
-#         if quantity is not None:
-#             product.quantity = quantity
-#             product.save()
-#             serializer = self.get_serializer(product)
-#             return Response(serializer.data)
-
-#         return Response('Choose an amount', status=400)
-
 class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthorPermission]

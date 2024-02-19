@@ -6,13 +6,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
 
-from django.http import JsonResponse
-from django.views import View
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import serializers
-import logging
-from . import tasks
 
 class RegistrationView(APIView):
 
@@ -83,26 +76,3 @@ class ForgotPasswordCompleteView(APIView):
 
  
 
-
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User  
-        fields = '__all__'
-
-@method_decorator(csrf_exempt, name='dispatch') 
-class TestView(View):
-    def get(self, request):
-        try:
-            example_instance = {'username': 'test_user', 'email': 'test@example.com'}
-            serializer = AccountSerializer(data=example_instance)
-            if serializer.is_valid():
-                return JsonResponse(serializer.data)
-            else:
-                return JsonResponse({'errors': serializer.errors}, status=400)
-        except Exception as e:
-            logger.error("Произошла ошибка в TestView: %s", str(e))
-   
-            

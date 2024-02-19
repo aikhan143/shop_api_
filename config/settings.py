@@ -175,26 +175,13 @@ MEDIA_URL = '/media/'
 import os
 import logging
 
-# Получаем абсолютный путь к текущей директории
 current_directory = os.path.dirname(os.path.abspath(__file__))
-
-# Создаем папку logs в текущей директории
 logs_directory = os.path.join(current_directory, 'logs')
 os.makedirs(logs_directory, exist_ok=True)
-
-# Полный путь к файлу логов
 log_file_path = os.path.join(logs_directory, 'logs.log')
-
-# Настройка базовой конфигурации
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-
-# Создание файла для записи логов
 file_handler = logging.FileHandler(log_file_path)
-
-# Настройка формата записей в файле (если нужно)
 file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-
-# Добавление обработчика к базовой конфигурации логирования
 logging.getLogger('').addHandler(file_handler)
 
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
