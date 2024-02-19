@@ -34,6 +34,8 @@ urlpatterns = [
     path('api/v1/', include('review.urls')),
     path('api/v1/', include('account.urls')),
     path('api/v1/', include('order.urls')),
-    path('docs/', schema_view.with_ui('swagger'))
+    path('docs/', schema_view.with_ui('swagger')),
+    path('api/v1/account/', include('account.urls'))
 
 ]
+

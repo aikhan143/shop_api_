@@ -39,7 +39,11 @@ class CartViewSet(ModelViewSet):
 
         serializer = CartProductSerializer(cart_product)
         return Response(serializer.data, status=201)
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> d536f0dcbb14e0184cb9022045cc5853356537fe
 class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthorPermission]

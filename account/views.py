@@ -6,13 +6,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
 
-from django.http import JsonResponse
-from django.views import View
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import serializers
-import logging
-from . import tasks
 
 class RegistrationView(APIView):
 
@@ -79,5 +72,3 @@ class ForgotPasswordCompleteView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.set_new_password()
         return Response('Password has been changed', status=200)
-    
-   
