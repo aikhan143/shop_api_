@@ -22,10 +22,10 @@ Clone this repository to your local folder
 - git clone git@github.com:aikhan143/team_hackathon.git
 
 Create a virtual environment
-- python3 -m venv <name>
+- python3 -m venv venv
 
 Activate a virtual environment
-- . <name>/bin/activate
+- . venv/bin/activate
 
 Install requirements from a file
 - pip3 install -r requirements.txt
