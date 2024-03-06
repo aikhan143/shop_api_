@@ -30,4 +30,3 @@ class LikeViewSet(ModelViewSet):
         elif self.action in ['update', 'partial_update', 'destroy']:
             self.permission_classes = [IsAuthorPermission]
         return super().get_permissions()
-    
